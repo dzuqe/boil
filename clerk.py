@@ -5,26 +5,26 @@ from algosdk.future import transaction
 from algosdk import account, mnemonic
 
 from utils import wait_for_confirmation
-from user import User
 from node import Node
 
-class Clerk(User):
-    def __init__(self, mnemonic):
-        User.__init__(self, mnemonic)
+class Clerk():
+    def __init__(self, account, client):
+        self.account = account
+        self.client = client
 
-    def send(self, to, amount, client):
-        params = client.suggested_params()
+    def send(self, to, amount):
+        params = self.client.suggested_params()
         params.flat_fee = True
         params.fee = 1000
 
         txn = algosdk.future.transaction.PaymentTxn(
-            self.public_key, # sender
+            self.account.public_key, # sender
             params,     # sp
             to,         # receiver
             amount,     # amount to send
         )
 
-        signed_txn = txn.sign(self.private_key)
+        signed_txn = txn.sign(self.account.private_key)
         tx_id = signed_txn.transaction.get_txid()
 
         client.send_transactions([signed_txn])
