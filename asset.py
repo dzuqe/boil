@@ -64,3 +64,6 @@ from module import Module
 class Asset(Module):
     def __init__(self, args):
         Module.__init__(self, args)
+
+    def exec(self):
+        pass

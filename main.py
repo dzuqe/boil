@@ -68,5 +68,6 @@ def main():
         else:                       module = EmptyModule(sys.argv[2:])
 
         boil = Boil(module)
+        boil.module.exec()
 
 main()

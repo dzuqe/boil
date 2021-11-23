@@ -18,6 +18,9 @@ class App(Module):
     def __init__(self, args):
         Module.__init__(self, args)
 
+    def exec(self):
+        pass
+
     def create(self):
         pass
 
