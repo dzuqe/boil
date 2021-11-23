@@ -6,11 +6,12 @@ from algosdk import account, mnemonic
 
 from utils import wait_for_confirmation
 from node import Node
+from module import Module
 
-class Clerk():
-    def __init__(self, account, client):
-        self.account = account
-        self.client = client
+class Clerk(Module):
+    def __init__(self, args):
+        Module.__init__(self, args)
+        #self.account = account
 
     def send(self, to, amount):
         params = self.client.suggested_params()

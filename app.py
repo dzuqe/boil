@@ -12,10 +12,11 @@ from utils import wait_for_confirmation
 from node import Node
 from account import Account
 from asset import Asset
+from module import Module
 
-class App():
-    def __init__(self):
-        pass
+class App(Module):
+    def __init__(self, args):
+        Module.__init__(self, args)
 
     def create(self):
         pass

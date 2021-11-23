@@ -3,6 +3,12 @@ import os
 import sys
 from boil import Boil
 
+from clerk import Clerk
+from asset import Asset
+from app import App
+from account import Account
+from empty import EmptyModule
+
 class Lexer():
     def lex(self, argv):
         for arg in argv:
@@ -27,31 +33,12 @@ Flags:
 """)
 
 else:
-    lexer = Lexer()
-    lexer.lex(sys.argv[1:])
     choice = sys.argv[1]
-    boil = Boil()
+    if   choice == "clerk":     module = Clerk(sys.argv[2:])
+    elif choice == "asset":     module = Asset(sys.argv[2:])
+    elif choice == "app":       module = App(sys.argv[2:])
+    elif choice == "account":   module = Account(sys.argv[2:])
+    else:                       module = EmptyModule(sys.argv[2:])
 
-#    if choice == "clerk":
-#        print("clerk")
-#        if 
-#        cli = sys.argv[2]
-#        print(cli)
-#        print(boil.clerk)
-#
-#    elif choice == "asset":
-#        print("asset")
-#        print(boil.asset)
-#
-#    elif choice == "app":
-#        print("app")
-#        print(boil.app)
-#
-#    elif choice == "account":
-#        print("account")
-#        print(boil.account)
-#
-#    else:
-#        print("Error: Unknown option")
-
+    boil = Boil(module)
 

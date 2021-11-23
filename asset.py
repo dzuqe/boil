@@ -9,6 +9,7 @@ from algosdk.future import transaction
 from algosdk import account, mnemonic
 
 from utils import wait_for_confirmation
+from module import Module
 
 #token = os.environ["PURESTAKE_API_KEY"]
 #headers = {
@@ -60,6 +61,6 @@ from utils import wait_for_confirmation
 #print(transaction_response)
 
 
-class Asset():
-    def __init__(self):
-        pass
+class Asset(Module):
+    def __init__(self, args):
+        Module.__init__(self, args)
