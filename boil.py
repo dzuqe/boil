@@ -61,7 +61,7 @@ Flags:
             if   choice == "clerk":     module = Clerk(self.argv[2:])
             elif choice == "asset":     module = Asset(self.argv[2:])
             elif choice == "app":       module = App(self.argv[2:])
-            elif choice == "account":   module = Account(self.argv[2:])
+            elif choice == "account":   module = Account(os.environ['MARC'], self.argv[2:])
 
             elif choice.startswith('-') and len(choice) == 2:
                 self.check_flags(choice[1])
@@ -77,4 +77,5 @@ Flags:
             module.set_client(self.node.client)
             module.exec()
 
-Boil(sys.argv).exec()
+boil = Boil(sys.argv)
+boil.exec()
