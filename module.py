@@ -7,3 +7,6 @@ class Module():
 
     def exec(self):
         pass
+
+    def help(self):
+        pass

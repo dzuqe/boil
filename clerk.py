@@ -11,8 +11,11 @@ from account import Account
 
 class Clerk(Module):
     def __init__(self, args):
+        command = ""
+        if len(args) > 0:
+            command = args[0]
         self.data = {
-            "command": args[0],
+            "command": command,
             "from": "",
             "amount": 0,
             "to": "",
@@ -32,14 +35,15 @@ class Clerk(Module):
             i += 1
 
         self.account = Account(os.environ["MARC"])
-        print(self.data)
-
 
     def exec(self):
         if self.data['command'] == 'send':
+            # interrogate data struct
             self.send(self.data['to'], self.data['amount'])
+
         else:
-            print(f"Unknown command: {self.data['command']}")
+            print(f"Unknown command: {self.data['command']}\n")
+            self.help()
 
     def send(self, to, amount):
         params = self.client.suggested_params()
@@ -64,7 +68,14 @@ class Clerk(Module):
 
     def sign(self):
         pass
+
     def inspect(self):
         pass
-    def rawsend(self):
-        pass
+
+    def help(self):
+        print("Usage: ")
+        print("  boil clerk [command] [flags]\n")
+        print("Avaialble commands:")
+        print("  send       send money to an address")
+        print("  inspect    print a transaction file")
+        print("  sign       sign a transaction file")
