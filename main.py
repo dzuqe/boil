@@ -8,9 +8,15 @@ from asset import Asset
 from app import App
 from account import Account
 from empty import EmptyModule
+from module import Module
 
-def main_help():
-    print("""boil is the alternative cli for interacting with Algorand public nodes. 
+class Main(Module):
+    def __init__(self, argv):
+        self.argv = argv
+
+    def help(self):
+        print("""boil is the alternative cli for interacting with Algorand \
+public nodes.
 
 Usage:
   boil [flags]
@@ -27,47 +33,47 @@ Flags:
   -h, --help        help for boil
 """)
 
-def check_flags(flag):
-    if flag == 'v':
-        print("version 0.0.1")
-    elif flag == 'h':
-        main_help()
+    def check_flags(self, flag):
+        if flag == 'v':
+            print("version 0.0.1")
+        elif flag == 'h':
+            self.help()
 
-def check_full_flags(flag):
-    if flag == "version":
-        print("version 0.0.1")
-    elif flag == "help":
-        main_help()
-    else:
-        print(f"Error: unknown flag: --{flag}\n")
-        print("Usage:")
-        print("  boil [flags]")
-        print("  boil [module]\n")
-        main_help()
+    def check_full_flags(self, flag):
+        if flag == "version":
+            print("version 0.0.1")
+        elif flag == "help":
+            self.help()
+        else:
+            print(f"Error: unknown flag: --{flag}\n")
+            print("Usage:")
+            print("  boil [flags]")
+            print("  boil [module]\n")
+            self.help()
 
-def main():
-    if len(sys.argv) <= 1:
-        main_help()
-    else:
-        choice = sys.argv[1]
+    def exec(self):
+        if len(self.argv) <= 1:
+            self.help()
+        else:
+            choice = self.argv[1]
 
-        if   choice == "clerk":     module = Clerk(sys.argv[2:])
-        elif choice == "asset":     module = Asset(sys.argv[2:])
-        elif choice == "app":       module = App(sys.argv[2:])
-        elif choice == "account":   module = Account(sys.argv[2:])
+            if   choice == "clerk":     module = Clerk(self.argv[2:])
+            elif choice == "asset":     module = Asset(self.argv[2:])
+            elif choice == "app":       module = App(self.argv[2:])
+            elif choice == "account":   module = Account(self.argv[2:])
 
-        elif choice.startswith('-') and len(choice) == 2:
-            check_flags(choice[1])
-            return
+            elif choice.startswith('-') and len(choice) == 2:
+                self.check_flags(choice[1])
+                return
 
-        elif choice.startswith('--'):
-            flag = choice[2:]
-            check_full_flags(flag)
-            return
+            elif choice.startswith('--'):
+                flag = choice[2:]
+                self.check_full_flags(flag)
+                return
 
-        else:                       module = EmptyModule(sys.argv[2:])
+            else:                       module = EmptyModule(self.argv[2:])
 
-        boil = Boil(module)
-        boil.module.exec()
+            boil = Boil(module)
+            boil.module.exec()
 
-main()
+Main(sys.argv).exec()

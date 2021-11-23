@@ -7,6 +7,8 @@ class Account():
 
     def balance(self):
         pass
+
+
     def delete(self):
         pass
     def rewards(self):
