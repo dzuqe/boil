@@ -51,14 +51,13 @@ class Account {
     help()
 }
 class Empty {
-    Boil(argv)
+    Empty(argv)
     exec()
     help()
 }
 
 Client -- Boil : boils >
 
-Boil --|> Module
 Boil *-- Node : connects >
 
 Empty --|> Module
@@ -66,5 +65,12 @@ Asset --|> Module
 App --|> Module
 Account --|> Module
 Clerk --|> Module
+
+
+Empty .. Boil
+Asset .. Boil
+App .. Boil
+Account .. Boil
+Clerk .. Boil
 
 @enduml
