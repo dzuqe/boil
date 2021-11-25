@@ -8,8 +8,8 @@ from pyteal import *
 from algosdk.future import transaction
 from algosdk import account, mnemonic
 
-from utils import wait_for_confirmation
-from module import Module
+from src.utils import wait_for_confirmation
+from src.module import Module
 
 #token = os.environ["PURESTAKE_API_KEY"]
 #headers = {

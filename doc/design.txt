@@ -1,0 +1,70 @@
+@startuml
+
+class Client
+class Node
+interface Module {
+    exec()
+    help()
+}
+
+class Boil  {
+    node : Node
+    Boil(argv)
+    exec()
+    help()
+    check_flags(flag)
+    check_full_flags(flag)
+}
+class Clerk {
+    Clerk(argv)
+    exec()
+    help()
+    send()
+    sign()
+    inspect()
+}
+class Asset {
+    Asset(argv)
+    create()
+    exec()
+    help()
+}
+class App {
+    App(argv)
+    create()
+    delete()
+    call()
+    clear()
+    info()
+    interact()
+    read()
+    update()
+    exec()
+    help()
+}
+class Account {
+    Account(mnemonic, argv)
+    balance()
+    delete()
+    rewards()
+    exec()
+    help()
+}
+class Empty {
+    Boil(argv)
+    exec()
+    help()
+}
+
+Client -- Boil : boils >
+
+Boil --|> Module
+Boil *-- Node : connects >
+
+Empty --|> Module
+Asset --|> Module
+App --|> Module
+Account --|> Module
+Clerk --|> Module
+
+@enduml

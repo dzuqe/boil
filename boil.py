@@ -2,13 +2,13 @@
 import os
 import sys
 
-from clerk import Clerk
-from asset import Asset
-from app import App
-from account import Account
-from empty import EmptyModule
-from module import Module
-from node import Node
+from src.clerk import Clerk
+from src.asset import Asset
+from src.app import App
+from src.account import Account
+from src.empty import EmptyModule
+from src.module import Module
+from src.node import Node
 
 class Boil(Module):
     def __init__(self, argv):

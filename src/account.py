@@ -1,5 +1,5 @@
 import algosdk
-from module import Module
+from src.module import Module
 
 class Account(Module):
     def __init__(self, mnemonic, args):

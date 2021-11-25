@@ -1,6 +1,12 @@
 # Boil
 a lightweight alternative goal command line to use with public nodes 
 
+## Documentation
+We take advantage of polymorphism to build a module system that executes commands
+with arguements passed into cli
+
+![design](doc/design.png)
+
 ## Usage
 ```
 Usage:

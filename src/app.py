@@ -8,16 +8,16 @@ from pyteal import *
 from algosdk.future import transaction
 from algosdk import account, mnemonic
 
-from utils import wait_for_confirmation
-from node import Node
-from account import Account
-from asset import Asset
-from module import Module
+from src.utils import wait_for_confirmation
+from src.node import Node
+from src.account import Account
+from src.asset import Asset
+from src.module import Module
 
 class App(Module):
     def __init__(self, args):
         Module.__init__(self, args)
-        self.account = Account(os.environ['ALGO_MNEMONIC'])
+        self.account = Account(os.environ['ALGO_MNEMONIC'], args)
         command = ""
         if len(args) > 0:
             command = args[0]

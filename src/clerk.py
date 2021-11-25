@@ -4,10 +4,8 @@ import algosdk
 from algosdk.future import transaction
 from algosdk import account, mnemonic
 
-from utils import wait_for_confirmation
-from node import Node
-from module import Module
-from account import Account
+from src.module import Module
+from src.account import Account
 
 class Clerk(Module):
     def __init__(self, args):
@@ -17,7 +15,7 @@ class Clerk(Module):
         self.data = {
             "command": command,
             "from": "",
-            "amount": 0,
+            "amount": -1,
             "to": "",
         }
 
@@ -34,11 +32,20 @@ class Clerk(Module):
                 self.data["to"] = args[i + 1]
             i += 1
 
-        self.account = Account(os.environ["MARC"])
+        self.account = Account(os.environ["MARC"], args)
 
     def exec(self):
         if self.data['command'] == 'send':
             # interrogate data struct
+            if self.data['to'] == '':
+                print('Error: To arguement missing.')
+                self.help()
+                return
+            elif self.data['amount'] == -1:
+                print('Error: Invalid amount value')
+                self.help()
+                return
+
             self.send(self.data['to'], self.data['amount'])
 
         else:
@@ -57,14 +64,15 @@ class Clerk(Module):
             amount,     # amount to send
         )
 
-        signed_txn = txn.sign(self.account.private_key)
-        tx_id = signed_txn.transaction.get_txid()
+        try:
+            signed_txn = txn.sign(self.account.private_key)
+            tx_id = signed_txn.transaction.get_txid()
+            self.client.send_transactions([signed_txn])
+            print("tx:", tx_id, "\n")
 
-        self.client.send_transactions([signed_txn])
-
-        wait_for_confirmation(self.client, tx_id)
-        transaction_response = self.client.pending_transaction_info(tx_id)
-        print(transaction_response)
+        except algosdk.error.WrongKeyLengthError:
+            print("Error: Invalid 'to' address (Wrong Key Length):", self.data['to'],"\n")
+            self.help()
 
     def sign(self):
         pass
