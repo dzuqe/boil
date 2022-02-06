@@ -33,8 +33,7 @@ class Account(Module):
 
     def balance(self):
         if self.data['address'] == '':
-            print("Error: Address arguement missing.\n")
-            self.help()
+            self.die("Address arguement missing")
             return
         account = self.client.account_info(self.data['address'])
         amount = algosdk.util.microalgos_to_algos(account['amount'])
@@ -45,12 +44,15 @@ class Account(Module):
 
     def rewards(self):
         if self.data['address'] == '':
-            print("Error: Address arguement missing.\n")
-            self.help()
+            self.die("Address arguement missing")
             return
         account = self.client.account_info(self.data['address'])
         amount = algosdk.util.microalgos_to_algos(account['rewards'])
         print(f"Rewards: {amount}")
+
+    def die(self, message):
+        print(f"Error: {message}.\n")
+        self.help()
 
     def help(self):
         print("Usage:")

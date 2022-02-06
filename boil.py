@@ -13,7 +13,7 @@ from src.node import Node
 class Boil(Module):
     def __init__(self, argv):
         self.argv = argv
-        self.node = Node(os.environ['PURESTAKE_API_KEY'], 'https://mainnet-algorand.api.purestake.io/ps2')
+        self.node = Node(os.environ['PURESTAKE_API_KEY'], 'testnet')
 
     def help(self):
         print("""boil is the alternative cli for interacting with Algorand \
