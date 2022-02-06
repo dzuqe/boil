@@ -14,22 +14,34 @@ class Clerk(Module):
             command = args[0]
         self.data = {
             "command": command,
-            "from": "",
-            "amount": -1,
-            "to": "",
+            "from": {
+                "value": "",
+                "required": False,
+                "error": False,
+            },
+            "amount": {
+                "value": -1,
+                "required": True,
+                "error": False,
+            },
+            "to": {
+                "value": "",
+                "required": True,
+                "error": False,
+            },
         }
 
         i = 0
         while i < len(args):
             if args[i] == "-f" \
                     and (i + 1) < len(args):
-                self.data["from"] = args[i + 1]
+                self.data["from"]["value"] = args[i + 1]
             elif args[i] == "-a" \
                     and (i + 1) < len(args):
-                self.data["amount"] = int(args[i + 1])
+                self.data["amount"]["value"] = int(args[i + 1])
             elif args[i] == "-t" \
                     and (i + 1) < len(args):
-                self.data["to"] = args[i + 1]
+                self.data["to"]["value"] = args[i + 1]
             i += 1
 
         self.account = Account(os.environ["MARC"], args)
@@ -37,20 +49,35 @@ class Clerk(Module):
     def exec(self):
         if self.data['command'] == 'send':
             # interrogate data struct
-            if self.data['to'] == '':
-                print('Error: To arguement missing.')
-                self.help()
-                return
-            elif self.data['amount'] == -1:
-                print('Error: Invalid amount value')
-                self.help()
-                return
+            error = False
+            if self.data['to']['value'] == '':
+                self.data['to']['error'] = True
+                error = True
+            if self.data['amount']['value'] == -1:
+                self.data['amount']['error'] = True
+                error = True
 
-            self.send(self.data['to'], self.data['amount'])
+            if error is False:
+                self.send(self.data['to']['value'], self.data['amount']['value'])
+            else:
+                print(f"Error: arguements {self.stripErrors()} missing")
 
         else:
             print(f"Unknown command: {self.data['command']}\n")
             self.help()
+
+    def stripErrors(self):
+        stripped = ""
+        i = 0
+        args = ['from','to','amount']
+        for label in args:
+            item = self.data[label]
+            if item['required'] is True:
+                stripped += "{" + label + "}"
+                if i < len(args) - 1:
+                    stripped += ", "
+            i += 1
+        return stripped
 
     def send(self, to, amount):
         params = self.client.suggested_params()
