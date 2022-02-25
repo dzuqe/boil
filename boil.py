@@ -9,11 +9,11 @@ from src.account import Account
 from src.empty import EmptyModule
 from src.module import Module
 from src.node import Node
+from src.nodeModule import NodeModule
 
 class Boil(Module):
     def __init__(self, argv):
         self.argv = argv
-        self.node = Node(os.environ['PURESTAKE_API_KEY'], 'testnet')
 
     def help(self):
         print("""boil is the alternative cli for interacting with Algorand \
@@ -53,6 +53,30 @@ Flags:
             self.help()
 
     def exec(self):
+        net = 'testnet'
+        provider = 'ps'
+        token = os.environ['PURESTAKE_API_KEY']
+
+        if 'BOIL_NET' in os.environ.keys() and os.environ['BOIL_NET'] == '':
+            print('Warning: BOIL_NET environment variable not set. Defaulting to "testnet"')
+        else:
+            net = os,environ['BOIL_NET']
+
+        if 'BOIL_PROV' not in os.environ.keys() or ('BOIL_PROV' in os.environ.keys() and os.environ['BOIL_PROV'] == ''):
+            print('Warning: BOIL_PROV environment variable not set. Defaulting to Pure Stake [ps]')
+            if os.environ['PURESTAKE_API_KEY'] == '':
+                print("Error: PURESTAKE_API_KEY environment variable not set.")
+                return
+        elif 'BOIL_PROV' in os.environ.keys():    
+            provider = os.environ['BOIL_PROV']
+            if provider == 'ps':
+                if os.environ['PURESTAKE_API_KEY'] == '':
+                    print("Error: PURESTAKE_API_KEY environment variable not set.")
+                    return
+
+        print()
+        self.node = Node(token, net, provider)
+
         if len(self.argv) <= 1:
             self.help()
         else:
@@ -62,6 +86,9 @@ Flags:
             elif choice == "asset":     module = Asset(self.argv[2:])
             elif choice == "app":       module = App(self.argv[2:])
             elif choice == "account":   module = Account(os.environ['MARC'], self.argv[2:])
+
+            elif choice == "node":
+                module = NodeModule(self.argv[2:], self.node)
 
             elif choice.startswith('-') and len(choice) == 2:
                 self.check_flags(choice[1])
